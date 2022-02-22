@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Button, Form, Header, Segment } from 'semantic-ui-react';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -103,7 +104,8 @@ const EventForm = ({
           floated='right'
         />
         <Button
-          onClick={() => setFormOpen(false)}
+          as={Link}
+          to='/events'
           type='submit'
           content='Cancel'
           floated='right'
