@@ -1,15 +1,21 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button, Form, Header, Segment } from 'semantic-ui-react';
 import { v4 as uuidv4 } from 'uuid';
+import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-const EventForm = ({
-  setFormOpen,
-  setEvents,
-  createEvent,
-  selectedEvent,
-  updateEvent,
-}) => {
+import { updateEvent, createEvent } from '../eventActions';
+
+const EventForm = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const params = useParams();
+  const selectedEvent = useSelector((state) =>
+    state.event.events.find((evt) => evt.id === params.id)
+  );
+
   const initialValues = selectedEvent ?? {
     title: '',
     category: '',
@@ -23,15 +29,17 @@ const EventForm = ({
 
   function handleFormSubmit() {
     selectedEvent
-      ? updateEvent({ ...selectedEvent, ...values })
-      : createEvent({
-          ...values,
-          id: uuidv4(),
-          hostedBy: 'Mith',
-          attendees: [],
-          hostPhotoURL: '/assets/user.png',
-        });
-    setFormOpen(false);
+      ? dispatch(updateEvent({ ...selectedEvent, ...values }))
+      : dispatch(
+          createEvent({
+            ...values,
+            id: uuidv4(),
+            hostedBy: 'Mith',
+            attendees: [],
+            hostPhotoURL: '/assets/user.png',
+          })
+        );
+    navigate('/events');
   }
 
   function handleInputChange(e) {
