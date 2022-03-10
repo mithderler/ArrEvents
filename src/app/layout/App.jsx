@@ -10,6 +10,7 @@ import './style.css';
 import Sandbox from '../../features/sandbox/Sandbox';
 import ModalManager from '../common/modals/ModalManager';
 import { ToastContainer } from 'react-toastify';
+import ErrorComponent from '../common/errors/ErrorComponent';
 
 function App() {
   const { key } = useLocation();
@@ -40,6 +41,7 @@ function App() {
                     key={key}
                   />
                   <Route path='/manage/:id' element={<EventForm />} key={key} />
+                  <Route path='/error' element={<ErrorComponent />} />
                 </Routes>
               </Container>
             </>
