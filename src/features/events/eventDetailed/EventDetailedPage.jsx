@@ -15,10 +15,15 @@ import LoadingComponent from '../../../app/layout/LoadingComponent';
 const EventDetailedPage = () => {
   const dispatch = useDispatch();
   const params = useParams();
+  const { currentUser } = useSelector((state) => state.auth);
   const event = useSelector((state) =>
     state.event.events.find((evt) => evt.id === params.id)
   );
   const { loading, error } = useSelector((state) => state.async);
+  const isHost = event?.hostUid === currentUser?.uid;
+  const isGoing = event?.attendees.some(
+    (attendee) => attendee.id === currentUser?.uid
+  );
 
   useFirestoreDoc({
     query: () => listenToEventFromFirestore(params.id),
@@ -34,12 +39,15 @@ const EventDetailedPage = () => {
   return (
     <Grid>
       <Grid.Column width={10}>
-        <EventDetailedHeader event={event} />
+        <EventDetailedHeader event={event} isGoing={isGoing} isHost={isHost} />
         <EventDetailedInfo event={event} />
         <EventDetailedChat />
       </Grid.Column>
       <Grid.Column width={6}>
-        <EventDetailedSidebar attendees={event?.attendees} />
+        <EventDetailedSidebar
+          attendees={event?.attendees}
+          hostUid={event.hostUid}
+        />
       </Grid.Column>
     </Grid>
   );
