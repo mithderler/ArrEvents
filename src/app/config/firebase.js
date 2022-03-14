@@ -13,6 +13,8 @@ const firebaseConfig = {
   storageBucket: 'arrevents-8a198.appspot.com',
   messagingSenderId: '698362174483',
   appId: '1:698362174483:web:a2f1ccd05328d94845b3e6',
+  databaseURL:
+    'https://arrevents-8a198-default-rtdb.europe-west1.firebasedatabase.app',
 };
 
 // export const app = initializeApp(firebaseConfig);
