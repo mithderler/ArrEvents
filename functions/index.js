@@ -121,7 +121,20 @@ exports.eventUpdated = functions.firestore
     return functions.logger.log('finished eventUpdated');
   });
 
+function newPost(user, code, eventId, event) {
+  return {
+    photoURL: user.photoURL,
+    date: admin.database.ServerValue.TIMESTAMP,
+    code,
+    displayName: user.displayName,
+    eventId,
+    userUid: user.id,
+    title: event.title,
+  };
+}
+
 //Update this function and add delete function too
+/*
 exports.eventCreated = functions.firestore
   .document('/events/{eventId}')
   .onCreate(async (snapshot, context) => {
@@ -150,15 +163,4 @@ exports.eventCreated = functions.firestore
     }
     return functions.logger.log('finished eventCreated');
   });
-
-function newPost(user, code, eventId, event) {
-  return {
-    photoURL: user.photoURL,
-    date: admin.database.ServerValue.TIMESTAMP,
-    code,
-    displayName: user.displayName,
-    eventId,
-    userUid: user.id,
-    title: event.title,
-  };
-}
+*/

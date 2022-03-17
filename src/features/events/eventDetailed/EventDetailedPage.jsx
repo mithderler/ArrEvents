@@ -9,16 +9,14 @@ import { Navigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import useFirestoreDoc from '../../../app/hooks/useFirestoreDoc';
 import { listenToEventFromFirestore } from '../../../app/firestore/firestoreService';
-import { listenToEvents } from '../eventActions';
+import { listenToSelectedEvent } from '../eventActions';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 
 const EventDetailedPage = () => {
   const dispatch = useDispatch();
   const params = useParams();
   const { currentUser } = useSelector((state) => state.auth);
-  const event = useSelector((state) =>
-    state.event.events.find((evt) => evt.id === params.id)
-  );
+  const event = useSelector((state) => state.event.selectedEvent);
   const { loading, error } = useSelector((state) => state.async);
   const isHost = event?.hostUid === currentUser?.uid;
   const isGoing = event?.attendees.some(
@@ -27,7 +25,7 @@ const EventDetailedPage = () => {
 
   useFirestoreDoc({
     query: () => listenToEventFromFirestore(params.id),
-    data: (event) => dispatch(listenToEvents([event])),
+    data: (event) => dispatch(listenToSelectedEvent(event)),
     deps: [params.id, dispatch],
   });
 
