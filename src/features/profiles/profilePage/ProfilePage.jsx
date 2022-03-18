@@ -12,29 +12,39 @@ import LoadingComponent from '../../../app/layout/LoadingComponent';
 function ProfilePage() {
   const params = useParams();
   const dispatch = useDispatch();
-  const { selectedUserProfile } = useSelector((state) => state.profile);
+  const { selectedUserProfile, currentUserProfile } = useSelector(
+    (state) => state.profile
+  );
   const { currentUser } = useSelector((state) => state.auth);
   const { loading, error } = useSelector((state) => state.async);
+  let profile;
 
   useFirestoreHook({
     query: () => getUserProfile(params.id),
     data: (profile) => dispatch(listenToSelectedUserProfile(profile)),
     deps: [dispatch, params.id],
+    shouldExecute: params.id !== currentUser.uid,
   });
 
-  if ((loading && !selectedUserProfile) || (!selectedUserProfile && !error))
+  if (params.id === currentUser.uid) {
+    profile = currentUserProfile;
+  } else {
+    profile = selectedUserProfile;
+  }
+
+  if ((loading && !profile) || (!profile && !error))
     return <LoadingComponent content='Loading profile...' />;
 
   return (
     <Grid>
       <Grid.Column width={16}>
         <ProfileHeader
-          profile={selectedUserProfile}
-          isCurrentUser={currentUser?.uid === selectedUserProfile?.id}
+          profile={profile}
+          isCurrentUser={currentUser?.uid === profile?.id}
         />
         <ProfileContent
-          profile={selectedUserProfile}
-          isCurrentUser={currentUser?.uid === selectedUserProfile?.id}
+          profile={profile}
+          isCurrentUser={currentUser?.uid === profile?.id}
         />
       </Grid.Column>
     </Grid>
