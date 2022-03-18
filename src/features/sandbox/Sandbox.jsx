@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { Button } from 'semantic-ui-react';
 import { openModal } from '../../app/common/modals/modalReducer';
-import TestMap from './TestMap';
 import TestPlaceInput from './TestPlaceInput';
 
 import { increment, decrement } from './testReducer';

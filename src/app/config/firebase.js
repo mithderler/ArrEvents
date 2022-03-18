@@ -7,14 +7,13 @@ import 'firebase/compat/storage';
 // import { initializeApp } from 'firebase/app';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyDKDawdUstTl-fv_oJVECip5zRN5GwFQxg',
-  authDomain: 'arrevents-8a198.firebaseapp.com',
-  projectId: 'arrevents-8a198',
-  storageBucket: 'arrevents-8a198.appspot.com',
-  messagingSenderId: '698362174483',
-  appId: '1:698362174483:web:a2f1ccd05328d94845b3e6',
-  databaseURL:
-    'https://arrevents-8a198-default-rtdb.europe-west1.firebasedatabase.app',
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MSG_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID,
+  databaseURL: process.env.REACT_APP_DATABASE_URL,
 };
 
 // export const app = initializeApp(firebaseConfig);
