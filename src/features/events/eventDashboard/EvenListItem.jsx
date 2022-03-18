@@ -2,9 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Icon, Item, Label, List, Segment } from 'semantic-ui-react';
 import { format } from 'date-fns';
-
 import EventListAttandee from './EventListAttendee';
-import { deleteEventInFirestore } from '../../../app/firestore/firestoreService';
 
 const EvenListItem = ({ event }) => {
   return (
@@ -46,12 +44,6 @@ const EvenListItem = ({ event }) => {
       </Segment>
       <Segment clearing>
         <div>{event.description}</div>
-        <Button
-          onClick={() => deleteEventInFirestore(event.id)}
-          color='red'
-          floated='right'
-          content='Delete'
-        />
         <Button
           as={Link}
           to={`/events/${event.id}`}

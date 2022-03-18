@@ -1,12 +1,18 @@
 /* global google */
-import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
+import {
+  Link,
+  Navigate,
+  useLocation,
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, Confirm, Header, Segment } from 'semantic-ui-react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
 import MyTextInput from '../../../app/common/form/MyTextInput';
-import { listenToSelectedEvent } from '../eventActions';
+import { clearSelectedEvent, listenToSelectedEvent } from '../eventActions';
 import MyTextArea from '../../../app/common/form/MyTextArea';
 import MySelectInput from '../../../app/common/form/MySelectInput';
 import { categoryData } from '../../../app/api/categoryOptions';
@@ -21,16 +27,22 @@ import {
 } from '../../../app/firestore/firestoreService';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { toast } from 'react-toastify';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const EventForm = () => {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const dispatch = useDispatch();
   const params = useParams();
   const [loadingCancel, setLoadingCancel] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const { selectedEvent } = useSelector((state) => state.event);
   const { loading, error } = useSelector((state) => state.async);
+
+  useEffect(() => {
+    if (pathname !== '/createEvent') return;
+    dispatch(clearSelectedEvent());
+  }, [dispatch, pathname]);
 
   const initialValues = selectedEvent ?? {
     title: '',
@@ -73,7 +85,8 @@ const EventForm = () => {
   }
 
   useFirestoreDoc({
-    shouldExecute: !!params.id,
+    shouldExecute:
+      params.id !== selectedEvent?.id && pathname !== '/createEvent',
     query: () => listenToEventFromFirestore(params.id),
     data: (event) => dispatch(listenToSelectedEvent(event)),
     deps: [params.id, dispatch],
@@ -86,6 +99,7 @@ const EventForm = () => {
   return (
     <Segment clearing>
       <Formik
+        enableReinitialize
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting }) => {
